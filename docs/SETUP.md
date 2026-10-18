@@ -9,7 +9,7 @@
 5. Put the new project's Project URL and publishable/anon key in `.env` as `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
 6. Apply reviewed SQL migrations to the NEW project only, then run `npm run dev`.
 
-The current UI is a foundation screen, not the completed authorisation application. Sign-in and HMO registration intentionally remain disabled until secure server-side provisioning and the full application migration are implemented.
+The current UI supports email/password sign-in, HMO registration and a workspace overview. The authorisation, claims, settlement, team and billing modules are not yet feature-complete; use only test data until the release gates are passed.
 
 ## Secrets
 
