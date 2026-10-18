@@ -83,7 +83,7 @@ export default function AuthorizationsPage() {
   async function decide(nextDecision:string) {
     if(!supabase||!workspaceId||!selected)return;
     setSaving(true);setError('');setNotice('');
-    const itemDecisions=selected.items.map((item,index)=>({
+    const itemDecisions=selected.items.map((item)=>({
       id:item.id,
       status:nextDecision==='declined'?'declined':'approved',
       approved_amount:nextDecision==='declined'?null:(approvedAmount===''?item.requested_amount:Number(approvedAmount))
