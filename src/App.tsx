@@ -11,7 +11,7 @@ function Landing() { return <Layout><main className="shell"><section className="
 function AuthPage({ mode }: { mode: 'sign-in' | 'register' }) {
   const navigate = useNavigate(); const client = supabase; const [email,setEmail]=useState(''); const [password,setPassword]=useState(''); const [workspace,setWorkspace]=useState(''); const [loading,setLoading]=useState(false); const [error,setError]=useState(''); const [message,setMessage]=useState('');
   if (!isSupabaseConfigured || !client) return <Layout><main className="form-shell"><p className="eyebrow">SETUP REQUIRED</p><h1>Connect MedAuth</h1><p>Authentication is unavailable until the new Supabase URL and anon key are configured.</p><Link className="button secondary" to="/">Return home</Link></main></Layout>;
-  async function submit(e: FormEvent) { e.preventDefault(); setError('');setMessage('');setLoading(true); try {
+  async function submit(e: FormEvent) { e.preventDefault(); if (!client) { setError('Supabase is not configured.'); return; } setError('');setMessage('');setLoading(true); try {
     if(mode==='register') {
       const slug=workspace.trim().toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,50);
       if(workspace.trim().length<2 || !slug) throw new Error('Enter a valid organisation name.');
