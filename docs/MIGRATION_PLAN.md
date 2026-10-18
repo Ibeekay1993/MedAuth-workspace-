@@ -18,7 +18,7 @@
 - [x] Claim review with approved amount bounded by submitted amount.
 - [x] Settlement batch creation from approved claims and paid-state transition.
 - [x] CSV payment-advice export from a settlement batch.
-- [ ] Support multiple requested clinical items per authorisation and item-level review UI.
+- [x] Support 1–30 clinical items per authorisation with atomic submission and item-level review decisions.
 - [ ] Add referrals, NHIA/tariff catalogue and policy/beneficiary verification workflows.
 - [ ] Add pagination, robust empty/error states, automated integration tests and idempotency/race tests.
 
