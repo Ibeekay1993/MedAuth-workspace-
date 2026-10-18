@@ -1,26 +1,48 @@
-# MedAuth Workspace
+# MedAuth
 
-Multi-tenant HMO authorisation and claims SaaS. This repository is the commercial development destination; the original `Ibeekay1993/medicodeui` repository is read-only reference.
+Independent multi-tenant HMO authorisation and claims SaaS, built with React, TypeScript, Vite and Supabase.
 
-## Migration guardrails
+## What is implemented
 
-- Preserve existing MedCode clinical, authorisation, claims, settlement, referral, reporting, WhatsApp, and role-based workflows.
-- Do not copy production patient data, database dumps, environment secrets, or Ronsberger-specific configuration.
-- Use a separate Supabase project and credentials for this application.
-- Enforce workspace isolation in PostgreSQL Row Level Security, RPCs, Edge Functions, background jobs and storage, not only UI routes.
-- Validate workspace membership server-side; never trust a client-supplied tenant ID.
-- Separate platform-owner privileges from tenant workspace administration.
-- Keep subscription status independent of clinical record retention and financial audit history.
-- Run feature parity, tenant-isolation, security, and load tests before any production rollout.
+- Responsive MedAuth landing page, email/password registration and sign-in.
+- HMO workspace provisioning through a restricted database function; first member becomes workspace owner.
+- Workspace dashboard and current-user membership listing.
+- Initial tenant registry, role model, tenant-scoped authorisation request/items, claims, settlement batch and audit-event schema.
+- Row Level Security policies scoped to active workspace memberships and role categories.
+- CI workflow for type-checking, linting and production build.
 
-## Status
+## Important: current release status
 
-Repository initialized. The MedCode application has **not yet been migrated**. No subscription or tenant isolation functionality is implemented yet.
+**This is an early working foundation, not yet a production-ready complete migration.** The original MedCode application’s full feature set has not been migrated into this repository. In the workspace dashboard, authorisation, claims, reports and team management are explicitly marked as requiring migration. Payment advice generation, referrals, tariff/NHIA catalogue, WhatsApp/Evolution API, notifications, subscription checkout/webhooks, platform-owner administration, complete role-management flows, MFA policy, storage policies, backup/restore, and end-to-end tenant-isolation tests remain outstanding.
 
-## Next steps
+Do not treat this repository as ready for live patient data or production deployment until the release gates in `docs/MIGRATION_PLAN.md` are completed and verified. CI passing alone does not establish security or feature parity.
 
-1. Inventory source repository files and business workflows.
-2. Import application source and non-secret configuration, preserving history where feasible.
-3. Implement tenant-aware schema and access controls before enabling multi-HMO onboarding.
-4. Build workspace signup, roles, billing, and platform administration.
-5. Validate parity and deploy to independent infrastructure.
+## Independent infrastructure only
+
+1. Create a **new** Supabase project for MedAuth. Do not use the Ronsberger production project.
+2. Configure the frontend variables from `.env.example`.
+3. Apply the migrations in `supabase/migrations` in filename order using the Supabase CLI or SQL migration workflow.
+4. Enable email confirmation and configure the correct application URL and redirect URLs in Supabase Auth.
+5. Run CI, database policy tests and manual signup / cross-tenant isolation tests before inviting real users.
+
+The frontend needs only the Supabase project URL and publishable/anon key. Never put a Supabase service-role key, payment-provider secret, WhatsApp API secret or other privileged credential in a `VITE_*` variable. Server-side integrations must be configured as Edge Function secrets.
+
+## Local development
+
+```sh
+npm install
+cp .env.example .env
+npm run dev
+```
+
+Before committing or deploying:
+
+```sh
+npm run typecheck
+npm run lint
+npm run build
+```
+
+## Security boundary
+
+Workspace membership, roles and subscription state must be enforced in the database and server-side functions—not only in React routes. Do not copy production patient records, tariff seed data, environment files, credentials or Ronsberger-specific brand/configuration into this repository. Any production rollout requires an independent security review and verified restore plan.
